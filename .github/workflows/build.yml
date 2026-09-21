@@ -10,8 +10,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      image: devkitpro/devkitarm:20241104
 
     steps:
       - name: Checkout repository
@@ -19,9 +17,9 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Compile Homebrew
+      - name: Build with Docker
         run: |
-          make
+          docker run --rm -v "$PWD":/src -w /src devkitpro/devkitarm:20241104 make
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
