@@ -1,0 +1,33 @@
+name: Build DS Homebrew
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: devkitpro/devkitarm:latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Compile Homebrew
+        run: |
+          make
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+            name: dspico-usb-gamepad-nds
+            path: |
+              *.nds
+              *.dsi
+              *.ids
